@@ -1,0 +1,19 @@
+# Quick Whiteboard of Architecture
+- File I/O Component
+    - Converts a struct (or structs) containing all employee data into a file format, and vice versa.
+    - Ensures the file will not become corrupted through use of the database.
+- Employee Array
+    - An array of employee structs, each containing name, address and hours worked
+- Add/Update Component
+    - Add a new employee to the employee array
+    - Find an employee by name and change their information (including name, if needed)
+- Save/Load Component
+    - Save an employee array using file I/O component
+    - Load a new employee array using file I/O component
+- Search Component
+    - Find all matches of employees within the employee array using name, address, or hours worked as the criterion
+- Console Component
+    - Define commands available to users
+    - Validate/sanitize user input before executing any command
+    - Provide feedback to users when a command is executed
+    - Retrieve and display data to users when queried
