@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "database.h"
-#include "file.h"
+#include "../include/database.h"
+#include "../include/file.h"
 
 int main(int argc, char *argv[])
 {
