@@ -8,4 +8,6 @@ struct database_header
     unsigned int file_length;
 };
 
+int create_database(char *file_path);
+
 #endif

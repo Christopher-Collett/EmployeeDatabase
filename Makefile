@@ -4,7 +4,7 @@ SRC=$(wildcard src/*.c)
 OBJ=$(patsubst src/%.c, bin/obj/%.o, $(SRC))
 
 run: clean default
-	./$(TARGET) ./Experiments/my-db.db
+	./$(TARGET) ./bin/out/my-db.db -n
 
 default: $(TARGET)
 
@@ -15,5 +15,5 @@ bin/obj/%.o: src/%.c
 	gcc -I$(INCLUDE) -c $< -o $@
 
 clean:
-	rm -rf $(TARGET)/*
+	rm -rf bin/out/*
 	rm -rf bin/obj/*

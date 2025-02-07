@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 
 #include "../include/database.h"
@@ -5,24 +6,22 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc < 2)
     {
-        fprintf(stderr, "Usage: %s <database-path>\n", argv[0]);
+        fprintf(stderr, "Usage: %s <file> [options]\n", argv[0]);
         return 1;
     }
+    char *file_path = argv[1];
 
-    char *filename = argv[1];
-
-    struct database_header header = {0};
-
-    if (read_header(filename, &header))
+    if (argc >= 3)
     {
-        return 1;
+        char *flag = argv[2];
+        if (strcmp(flag, "-n") == 0)
+        {
+            printf("Creating new database at: %s\n", file_path);
+            return create_database(file_path);
+        }
     }
-
-    printf("Database version: %d\n", header.version);
-    printf("Number of employees: %d\n", header.employees);
-    printf("File length: %d\n", header.file_length);
 
     return 0;
 }
