@@ -1,7 +1,10 @@
-TARGET=bin/out/EmployeeDatabase
+TARGET=bin/out/dbview
 INCLUDE=include
 SRC=$(wildcard src/*.c)
 OBJ=$(patsubst src/%.c, bin/obj/%.o, $(SRC))
+
+run: clean default
+	./$(TARGET) ./Experiments/my-db.db
 
 default: $(TARGET)
 
