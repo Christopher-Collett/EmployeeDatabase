@@ -1,3 +1,17 @@
+# DBView
+dbview <file_path> <options>
+    <file_path>   The path to the database file, which contains a properly formatted database header.
+    <options>     ONE option from below (additional options will be ignored)
+
+## Options
+    -a <name>;<address>;<hours>     Add a new employee.
+    -u <id>;<hours>                 Update employee hours.
+    -c <id>;<name>;<address>        Update employee info.
+    -d <id>                         Delete employee.
+    -fn <name>                      Filter employees by name (displays up to 100).
+    -fa <address>                   Filter employees by address (displays up to 100).
+    -fh <hours>                     Filter employees by hours (displays up to 100).
+
 # Quick Whiteboard of Architecture
 - File I/O Component
     - Converts a struct (or structs) containing all employee data into a file format, and vice versa.
