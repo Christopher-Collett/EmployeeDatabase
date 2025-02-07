@@ -4,24 +4,25 @@
 #include "../include/database.h"
 #include "../include/file.h"
 
+int error_message(char *this_file)
+{
+    fprintf(stderr, "Usage: %s <file> [options] -- minimum one option required\n", this_file);
+    return 1;
+}
+
 int main(int argc, char *argv[])
 {
-    if (argc < 2)
-    {
-        fprintf(stderr, "Usage: %s <file> [options]\n", argv[0]);
-        return 1;
-    }
-    char *file_path = argv[1];
+    if (argc < 3) return error_message(argv[0]);
 
-    if (argc >= 3)
+    char *file_path = argv[1];
+    char flag = argv[2][1];
+
+    switch (flag)
     {
-        char *flag = argv[2];
-        if (strcmp(flag, "-n") == 0)
-        {
+        case 'n':
             printf("Creating new database at: %s\n", file_path);
             return create_database(file_path);
-        }
+        default:
+            return error_message(argv[0]);
     }
-
-    return 0;
 }
