@@ -5,8 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "../include/file.h"
-#include "../include/database.h"
+#include "file.h"
+#include "database.h"
 
 // Read the database header from specified file.
 // Returns 0 on success, 1 on failure.

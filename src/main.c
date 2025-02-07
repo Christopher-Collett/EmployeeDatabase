@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "../include/database.h"
-#include "../include/file.h"
+#include "database.h"
+#include "file.h"
 
 int error_message(char *this_file)
 {
