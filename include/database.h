@@ -9,5 +9,6 @@ struct database_header
 };
 
 int create_database(char *file_path);
+int add_employee(char *file_path, char *employee);
 
 #endif

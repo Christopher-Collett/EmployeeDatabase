@@ -5,6 +5,7 @@ OBJ=$(patsubst src/%.c, bin/obj/%.o, $(SRC))
 
 run: clean default
 	./$(TARGET) ./bin/out/my-db.db -n
+	./$(TARGET) ./bin/out/my-db.db -a "John Doe"
 
 default: $(TARGET)
 

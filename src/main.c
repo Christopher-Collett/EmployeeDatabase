@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "../include/database.h"
 #include "../include/file.h"
@@ -24,12 +25,18 @@ int main(int argc, char *argv[])
 
     char *file_path = argv[1];
     char flag = get_flag(argv[2]);
+    bool has_argument = argc >= 4;
+    char *argument = has_argument ? argv[3] : "";
 
     switch (flag)
     {
         case 'n':
             printf("Creating new database at: %s\n", file_path);
             return create_database(file_path);
+        case 'a':
+            if (!has_argument) return error_message(argv[0]);
+            printf("Adding new employee to database at: %s\n", file_path);
+            return add_employee(file_path, argument);
         default:
             return error_message(argv[0]);
     }
