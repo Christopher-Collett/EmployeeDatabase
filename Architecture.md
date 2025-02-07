@@ -4,6 +4,7 @@ dbview <file_path> <options>
     <options>     ONE option from below (additional options will be ignored)
 
 ## Options
+    -n                              Create a new, empty employee database.
     -a <name>;<address>;<hours>     Add a new employee.
     -u <id>;<hours>                 Update employee hours.
     -c <id>;<name>;<address>        Update employee info.
