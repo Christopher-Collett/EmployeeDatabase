@@ -3,7 +3,6 @@
 #include <stdbool.h>
 
 #include "database.h"
-#include "file.h"
 
 int error_message(char *this_file)
 {
