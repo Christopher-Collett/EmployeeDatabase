@@ -9,6 +9,31 @@
 
 int create_database(char *file_path)
 {
+    struct database_header header =
+    {
+        .version = DATABASE_VERSION,
+        .employees = 0,
+    };
+
+    int create_flags = O_RDWR | O_CREAT | O_EXCL;
+    int user_rw_permissions = S_IRUSR | S_IWUSR;
+
+    int fd = open(file_path, create_flags, user_rw_permissions);
+    if (fd == -1)
+    {
+        perror("open");
+        return 1;
+    }
+
+    size_t bytes_written = write(fd, &header, sizeof(header));
+    if (bytes_written != sizeof(header))
+    {
+        fprintf(stderr, "Error: wrote %ld bytes, expected %lu\n", bytes_written, sizeof(header));
+        close(fd);
+        return 1;
+    }
+
+    close(fd);
     printf("Created new database at: %s\n", file_path);
     return 0;
 }
