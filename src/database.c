@@ -7,14 +7,8 @@
 
 #include "database.h"
 
-int create_database(char *file_path)
+int create_database_file(char *file_path)
 {
-    struct database_header header =
-    {
-        .version = DATABASE_VERSION,
-        .employees = 0,
-    };
-
     int create_flags = O_RDWR | O_CREAT | O_EXCL;
     int user_rw_permissions = S_IRUSR | S_IWUSR;
 
@@ -23,8 +17,20 @@ int create_database(char *file_path)
     {
         fprintf(stderr, "Error: Failed to create database file: ");
         perror("open");
-        return 1;
     }
+    return fd;
+}
+
+int create_database(char *file_path)
+{
+    int fd = create_database_file(file_path);
+    if (fd == -1) return 1;
+
+    struct database_header header =
+    {
+        .version = DATABASE_VERSION,
+        .employees = 0,
+    };
 
     size_t bytes_written = write(fd, &header, sizeof(header));
     if (bytes_written != sizeof(header))
