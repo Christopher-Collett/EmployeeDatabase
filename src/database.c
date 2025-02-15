@@ -6,8 +6,9 @@
 #include <string.h>
 
 #include "database.h"
+#include "common.h"
 
-int create_database_file(char *file_path)
+struct ResultInt create_database_file(char *file_path)
 {
     int create_flags = O_RDWR | O_CREAT | O_EXCL;
     int user_rw_permissions = S_IRUSR | S_IWUSR;
@@ -17,14 +18,16 @@ int create_database_file(char *file_path)
     {
         fprintf(stderr, "Error: Failed to create database file: ");
         perror("open");
+        return (struct ResultInt) { .code = FAILURE };
     }
-    return fd;
+    return (struct ResultInt) { .code = SUCCESS, .value = fd };
 }
 
-int create_database(char *file_path)
+ResultCode create_database(char *file_path)
 {
-    int fd = create_database_file(file_path);
-    if (fd == -1) return 1;
+    struct ResultInt file_result = create_database_file(file_path);
+    if (file_result.code == FAILURE) return FAILURE;
+    int fd = file_result.value;
 
     struct database_header header =
     {
@@ -37,18 +40,18 @@ int create_database(char *file_path)
     {
         fprintf(stderr, "Error: wrote %ld bytes, expected %lu\n", bytes_written, sizeof(header));
         close(fd);
-        return 1;
+        return FAILURE;
     }
 
     close(fd);
     printf("Created new database at: %s\n", file_path);
-    return 0;
+    return SUCCESS;
 }
 
-int add_employee(char *file_path, char *employee)
+ResultCode add_employee(char *file_path, char *employee)
 {
     printf("Added new employee (%s) to database at: %s\n", employee, file_path);
-    return 0;
+    return SUCCESS;
 }
 
 // Read the database header from specified file.
