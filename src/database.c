@@ -8,7 +8,7 @@
 #include "database.h"
 #include "common.h"
 
-struct ResultInt create_database_file(char *file_path)
+ResultCode create_database_file(char *file_path)
 {
     int create_flags = O_RDWR | O_CREAT | O_EXCL;
     int user_rw_permissions = S_IRUSR | S_IWUSR;
@@ -18,22 +18,29 @@ struct ResultInt create_database_file(char *file_path)
     {
         fprintf(stderr, "Error: Failed to create database file: ");
         perror("open");
+        return FAILURE;
+    }
+    close(fd);
+    return SUCCESS;
+}
+
+struct ResultInt open_database_file(char *file_path)
+{
+    int fd = open(file_path, O_RDWR);
+    if (fd == -1)
+    {
+        fprintf(stderr, "Error: Failed to open database file: ");
+        perror("open");
         return (struct ResultInt) { .code = FAILURE };
     }
     return (struct ResultInt) { .code = SUCCESS, .value = fd };
 }
 
-ResultCode create_database(char *file_path)
+ResultCode update_header(char *file_path, struct database_header *header)
 {
-    struct ResultInt file_result = create_database_file(file_path);
+    struct ResultInt file_result = open_database_file(file_path);
     if (file_result.code == FAILURE) return FAILURE;
     int fd = file_result.value;
-
-    struct database_header header =
-    {
-        .version = DATABASE_VERSION,
-        .employees = 0,
-    };
 
     size_t bytes_written = write(fd, &header, sizeof(header));
     if (bytes_written != sizeof(header))
@@ -42,8 +49,22 @@ ResultCode create_database(char *file_path)
         close(fd);
         return FAILURE;
     }
+}
 
-    close(fd);
+ResultCode create_database(char *file_path)
+{
+    struct database_header header =
+    {
+        .version = DATABASE_VERSION,
+        .employees = 0,
+    };
+
+    ResultCode create_result = create_database_file(file_path);
+    if (create_result == FAILURE) return FAILURE;
+
+    ResultCode update_result = update_header(file_path, &header);
+    if (update_result == FAILURE) return FAILURE;
+
     printf("Created new database at: %s\n", file_path);
     return SUCCESS;
 }
