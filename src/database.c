@@ -8,7 +8,7 @@
 #include "database.h"
 #include "common.h"
 
-ResultCode create_database_file(char *file_path)
+ResultCode _create_database_file(char *file_path)
 {
     int create_flags = O_RDWR | O_CREAT | O_EXCL;
     int user_rw_permissions = S_IRUSR | S_IWUSR;
@@ -24,7 +24,7 @@ ResultCode create_database_file(char *file_path)
     return SUCCESS;
 }
 
-struct ResultInt open_database_file(char *file_path)
+struct ResultInt _open_database_file(char *file_path)
 {
     int fd = open(file_path, O_RDWR);
     if (fd == -1)
@@ -36,7 +36,7 @@ struct ResultInt open_database_file(char *file_path)
     return (struct ResultInt) { .code = SUCCESS, .value = fd };
 }
 
-ResultCode write_to_file(int fd, void *data, size_t size_of_data)
+ResultCode _write_to_file(int fd, void *data, size_t size_of_data)
 {
     size_t bytes_written = write(fd, data, size_of_data);
     if (bytes_written != size_of_data)
@@ -47,13 +47,13 @@ ResultCode write_to_file(int fd, void *data, size_t size_of_data)
     return SUCCESS;
 }
 
-ResultCode update_header(char *file_path, struct database_header *header)
+ResultCode _update_header(char *file_path, struct database_header *header)
 {
-    struct ResultInt file_result = open_database_file(file_path);
+    struct ResultInt file_result = _open_database_file(file_path);
     if (file_result.code == FAILURE) return FAILURE;
     int fd = file_result.value;
 
-    ResultCode result = write_to_file(fd, header, sizeof(*header));
+    ResultCode result = _write_to_file(fd, header, sizeof(*header));
 
     close(fd);
     return result;
@@ -67,10 +67,10 @@ ResultCode create_database(char *file_path)
         .employees = 0,
     };
 
-    ResultCode create_result = create_database_file(file_path);
+    ResultCode create_result = _create_database_file(file_path);
     if (create_result == FAILURE) return FAILURE;
 
-    ResultCode update_result = update_header(file_path, &header);
+    ResultCode update_result = _update_header(file_path, &header);
     if (update_result == FAILURE) return FAILURE;
 
     printf("Created new database at: %s\n", file_path);
