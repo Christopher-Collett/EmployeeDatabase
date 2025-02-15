@@ -36,19 +36,24 @@ struct ResultInt open_database_file(char *file_path)
     return (struct ResultInt) { .code = SUCCESS, .value = fd };
 }
 
+ResultCode write_to_file(int fd, void *data, size_t size_of_data)
+{
+    size_t bytes_written = write(fd, data, size_of_data);
+    if (bytes_written != size_of_data)
+    {
+        fprintf(stderr, "Error: wrote %ld bytes, expected %lu\n", bytes_written, size_of_data);
+        return FAILURE;
+    }
+    return SUCCESS;
+}
+
 ResultCode update_header(char *file_path, struct database_header *header)
 {
     struct ResultInt file_result = open_database_file(file_path);
     if (file_result.code == FAILURE) return FAILURE;
     int fd = file_result.value;
 
-    ResultCode result = SUCCESS;
-    size_t bytes_written = write(fd, &header, sizeof(header));
-    if (bytes_written != sizeof(header))
-    {
-        fprintf(stderr, "Error: wrote %ld bytes, expected %lu\n", bytes_written, sizeof(header));
-        result = FAILURE;
-    }
+    ResultCode result = write_to_file(fd, header, sizeof(*header));
 
     close(fd);
     return result;
