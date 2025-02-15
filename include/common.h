@@ -2,8 +2,8 @@
 #define COMMON_H
 
 typedef enum {
-    SUCCESS,
-    FAILURE
+    SUCCESS = 0,
+    FAILURE = 1,
 } ResultCode ;
 
 struct ResultInt {
