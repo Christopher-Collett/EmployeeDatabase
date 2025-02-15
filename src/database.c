@@ -42,13 +42,16 @@ ResultCode update_header(char *file_path, struct database_header *header)
     if (file_result.code == FAILURE) return FAILURE;
     int fd = file_result.value;
 
+    ResultCode result = SUCCESS;
     size_t bytes_written = write(fd, &header, sizeof(header));
     if (bytes_written != sizeof(header))
     {
         fprintf(stderr, "Error: wrote %ld bytes, expected %lu\n", bytes_written, sizeof(header));
-        close(fd);
-        return FAILURE;
+        result = FAILURE;
     }
+
+    close(fd);
+    return result;
 }
 
 ResultCode create_database(char *file_path)
