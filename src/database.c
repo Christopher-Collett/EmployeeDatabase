@@ -21,6 +21,7 @@ int create_database(char *file_path)
     int fd = open(file_path, create_flags, user_rw_permissions);
     if (fd == -1)
     {
+        fprintf(stderr, "Error: Failed to create database file: ");
         perror("open");
         return 1;
     }
